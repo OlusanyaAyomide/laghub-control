@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const userValidation_1 = require("../validations/userValidation");
+const UserController_1 = require("../controllers/UserController");
+const userAuthenticate_1 = require("../middlewares/userAuthenticate");
+const authRoutes = express_1.default.Router();
+authRoutes.route("/signup").post(userValidation_1.ValidateNewUser, UserController_1.userSignUp);
+authRoutes.route("/login").post(userValidation_1.validateUserLogIn, UserController_1.userLogIn);
+authRoutes.route("/dm").get(userAuthenticate_1.authenticateUser, UserController_1.userDmList);
+authRoutes.route("/follow").post(userAuthenticate_1.authenticateUser, userValidation_1.validateFollowUser, UserController_1.followerUser);
+authRoutes.route("/profile").get(userAuthenticate_1.authenticateUser, UserController_1.getUserProfile);
+authRoutes.route("/dm/create").post(userAuthenticate_1.authenticateUser, UserController_1.CreateDm);
+authRoutes.route("/chat/:username").get(userAuthenticate_1.authenticateUser, UserController_1.getUserChats);
+authRoutes.route("/profilepage/:username").get(userAuthenticate_1.authenticateUser, UserController_1.userProfilePage);
+authRoutes.route("/getusername").post(userValidation_1.validateUSerchecks, UserController_1.getNewusername);
+authRoutes.route("/update").post(userAuthenticate_1.authenticateUser, userValidation_1.validateUserUpdate, UserController_1.updateProfile);
+authRoutes.route("/notification").get(userAuthenticate_1.authenticateUser, UserController_1.userNotification);
+exports.default = authRoutes;
